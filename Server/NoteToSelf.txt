@@ -1,0 +1,10 @@
+to get into virtual enviroment
+# source venv/bin/activate
+
+adds installed packages to requirements
+pip freeze > requirements.txt
+
+pip install -r requirements.txt
+
+leave enviroment
+# deactivate
