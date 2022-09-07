@@ -1,5 +1,8 @@
 # client
 
+## Start mysql
+sudo service mysqld start
+
 ## Project setup
 ```
 npm install
