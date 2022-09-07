@@ -1,7 +1,9 @@
 from cmath import log10
-from flask import Flask, jsonify, request
+import csv
+from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from flaskext.mysql import MySQL
+import os.path
 
 from datetime import datetime, timedelta
 import operator
@@ -21,6 +23,8 @@ RSSI_N_FACTOR = 2.5 # Between 2 and 4 in most indoor spaces
 RSSI_THRESHOLD = (RSSI_AT_1_METER - 10*RSSI_N_FACTOR*log10(RSSI_DISTANCE_EST)).real
 print(f"rssi threshold = {RSSI_THRESHOLD}")
 DEFUALT_VAR = 1.0682
+
+RAW_DATA_FILE = "rawData.csv"
 
 # instantiate the app
 app = Flask(__name__)
@@ -115,6 +119,11 @@ def databaseQuery():
       AND timeRec >= '{databaseQuery.dateTime[0]}' 
       AND timeRec <= '{databaseQuery.dateTime[1]}' """)
     rows = cursor.fetchall()
+
+    # Save most recent request to CSV for optional download
+    with open(RAW_DATA_FILE, 'w') as f:
+      csvFile = csv.writer(f)
+      csvFile.writerows(rows)
 
     rawTable = []
     for row in rows:
@@ -245,6 +254,13 @@ def rssiSubmit():
     response_obj['query'] = 'recived'
 
   return jsonify(response_obj)
+
+@app.route("/downloadTable", methods=['GET'])
+def downloadTable():
+  if os.path.exists(RAW_DATA_FILE):
+    return send_file(RAW_DATA_FILE)
+    
+
 
 # Start Flask server
 if __name__ == '__main__':

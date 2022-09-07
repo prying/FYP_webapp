@@ -6,6 +6,10 @@ sudo service mysqld start
 ## Project setup
 ```
 npm install
+
+- might also need others like axios
+npm install file-saver --save
+npm install @types/file-saver --save
 ```
 
 ### Compiles and hot-reloads for development

@@ -15,7 +15,8 @@
       <label class="form-check-label" for="flexSwitchCheckDefault">Raw data</label>
     </div>
     <br>
-    <button @click="submitQuery" type="button" class="btn btn-primary">Submit</button>
+    <button @click="submitQuery" type="button" class="btn btn-primary" style="margin:5px;">Submit</button>
+    <button @click="downloadButton" v-show="showRaw" type="button" class="btn btn-primary" style="margin:5px;">Download table</button>
   </form>
 </template>
 
@@ -44,6 +45,9 @@ export default {
       console.log(this.queryData.date[0]);
       // eslint-disable-next-line
       console.log(this.queryData.showRaw);
+    },
+    downloadButton() {
+      this.$emit('downloadTableButton');
     },
   },
   // Lifecycle hooks

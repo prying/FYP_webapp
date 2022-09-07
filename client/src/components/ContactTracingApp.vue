@@ -12,7 +12,8 @@
       </div>
      <div style="margin-left: 70%;">
        <div style="margin-left: 1.5em;">
-        <DatabaseInput @submitedQuery="submitQuery" @showRaw="showRaw"/>
+        <DatabaseInput @submitedQuery="submitQuery" @showRaw="showRaw"
+        @downloadTableButton="downloadTable"/>
        </div>
       </div>
     </div>
@@ -22,6 +23,7 @@
 
 <script>
 import axios from 'axios';
+import saveAs from 'file-saver';
 import DatabaseTable from './DatabaseTable.vue';
 import ContactTable from './ContactTable.vue';
 import DatabaseInput from './Input.vue';
@@ -77,6 +79,13 @@ export default {
     },
     showRaw(showRawData) {
       this.showRoomTable = !showRawData;
+    },
+    downloadTable() {
+      const path = 'http://159.196.72.33:5000/downloadTable';
+      axios.get(path, { responseType: 'blob' })
+        .then((response) => {
+          saveAs(response.data, 'table.csv');
+        });
     },
   },
 };
